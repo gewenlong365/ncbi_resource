@@ -15,8 +15,17 @@ import glob
 import os
 import re
 
+
+# 进入数据库
+conn = sqlite3.connect('ncbi_resource2.sqlite')
+# 启用外键约束
+conn.execute('PRAGMA foreign_keys = ON')
+# 指定游标对象
+c = conn.cursor()
+
 # 存入基因组与基因名对应表
 # 获取目录下所有已下载序列
+# 用数据库自带压缩
 path = './out_ref_down'
 gz_files = glob.glob(os.path.join(path, '*.gz'))
 
@@ -38,3 +47,6 @@ for file in gz_files:
                       (genome_id, gene_id))
             c.execute("INSERT INTO gene2seq VALUES (?, ?, ?)",
                       (gene_id, gene_info, compressed_seq))
+
+conn.commit()
+conn.close()
