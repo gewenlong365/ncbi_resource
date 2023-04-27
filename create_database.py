@@ -82,7 +82,7 @@ c.execute('''CREATE TABLE genomo2gene
               CONSTRAINT ref基因组对列表 FOREIGN KEY (genome_id)  REFERENCES assembly_summary_refseq(assembly_accession)
               )''')
 
-# # 创建触发器,删除ref/genebank表记录时删除基因组
+# 创建触发器,删除ref/genebank表记录时删除基因组
 # c.execute('''CREATE TRIGGER delete_genome_trigger
 #             AFTER DELETE ON assembly_summary_refseq or assembly_summary_genebank
 #             BEGIN
