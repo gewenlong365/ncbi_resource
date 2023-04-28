@@ -54,8 +54,6 @@ for file in gz_files:
 # for file in gz_files:
 #
 #
-#
-#
 #     with gzip.open(file, 'rt') as handle:
 #         for record in SeqIO.parse(handle, 'fasta'):
 #             # 抓取基因名，基因名行，基因序列压缩
