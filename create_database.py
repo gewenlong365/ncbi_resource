@@ -11,7 +11,7 @@ import csv
 import sqlite3
 
 # 创建数据库
-conn = sqlite3.connect('ncbi_resource2.sqlite')
+conn = sqlite3.connect('ncbi_resource.sqlite')
 # 启用外键约束
 conn.execute('PRAGMA foreign_keys = ON')
 # 指定游标对象
@@ -51,7 +51,7 @@ names = ["assembly_summary_refseq", "assembly_summary_genbank"]
 for name in names:
     assembly_summary(name)
 
-# 将nodes.dmp存入nodes表
+# 建立nodes.dmp表
 c.execute('''CREATE TABLE nodes
              (tax_id INTEGER PRIMARY KEY,
               parent_tax_id INTEGER,
@@ -76,20 +76,37 @@ c.execute('''CREATE TABLE names
 
 
 # 建立基因组资源表
-c.execute('''CREATE TABLE genomo2gene
-             (genome_id TEXT,
-              gene_id TEXT,
-              CONSTRAINT ref基因组对列表 FOREIGN KEY (genome_id)  REFERENCES assembly_summary_refseq(assembly_accession)
-              )''')
+c.execute('''CREATE TABLE genomo2gene (
+    assembly_accession TEXT PRIMARY KEY REFERENCES assembly_summary_refseq(assembly_accession) ON DELETE CASCADE,
+    genome_body BLOB
+    );''')
 
-# 创建触发器,删除ref/genebank表记录时删除基因组
-# c.execute('''CREATE TRIGGER delete_genome_trigger
-#             AFTER DELETE ON assembly_summary_refseq or assembly_summary_genebank
+# 基因组与基因分离
+# c.execute('''CREATE TABLE genomo2gene
+#              (genome_id TEXT,
+#               gene_id TEXT,
+#               CONSTRAINT ref基因组对列表 FOREIGN KEY (genome_id)  REFERENCES assembly_summary_refseq(assembly_accession)
+#               )''')
+# c.execute('''CREATE TABLE genomo2gene (
+#     genome_id TEXT REFERENCES assembly_summary_refseq(assembly_accession) ON DELETE CASCADE,
+#     gene_id TEXT,
+#     PRIMARY KEY (genome_id, gene_id)
+#     );''')
+
+
+# 创建触发器,删除ref表记录时删除基因组
+# c.execute('''CREATE TRIGGER delete_genomo
+#             AFTER DELETE ON assembly_summary_refseq
 #             BEGIN
-#                 DELETE FROM genomo2gene WHERE genome_id = OLD.assembly_accession;
-#                 DELETE FROM gene2seq WHERE gene_id IN (SELECT gene_id FROM genomo2gene WHERE genome_id = OLD.assembly_accession);
+#                 DELETE FROM genomo2gene WHERE assembly_accession = OLD.assembly_accession;
 #             END;''')
 
+
+# CREATE TRIGGER delete_genomo2gene
+# AFTER DELETE ON assembly_summary_refseq
+# BEGIN
+#     DELETE FROM genomo2gene WHERE genome_id = OLD.assembly_accession;
+# END;
 
 # 将assembly_summary_refseq.txt存入assembly_summary_refseq表
 # 将assembly_summary_genbank.txt存入assembly_summary_genbank表
@@ -102,8 +119,7 @@ for name in names:
                 f"INSERT INTO {name} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
                 row)
 
-# 查询句式：SELECT taxid FROM assembly_summary_refseq where assembly_accession
-# = 'GCF_000002865.3';
+# 查询句式：SELECT taxid FROM assembly_summary_refseq where assembly_accession = 'GCF_000002865.3';
 
 
 with open('nodes.dmp', 'r') as f:
