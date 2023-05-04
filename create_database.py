@@ -81,6 +81,12 @@ c.execute('''CREATE TABLE genomo2gene (
     genome_body BLOB
     );''')
 
+# 建立层级关系中英文表
+c.execute('''CREATE TABLE tier_en2ch (
+    en TEXT PRIMARY KEY,
+    cn TEXT
+    );''')
+
 # 基因组与基因分离
 # c.execute('''CREATE TABLE genomo2gene
 #              (genome_id TEXT,
@@ -121,7 +127,7 @@ for name in names:
 
 # 查询句式：SELECT taxid FROM assembly_summary_refseq where assembly_accession = 'GCF_000002865.3';
 
-
+# 写入nodes文件
 with open('nodes.dmp', 'r') as f:
     reader = csv.reader(
         filter(
@@ -137,7 +143,7 @@ with open('nodes.dmp', 'r') as f:
             row)
 # 查询句式：SELECT parent_tax_id FROM nodes where tax_id = '683';
 
-
+# 写入names文件
 with open('names.dmp', 'r') as f:
     reader = csv.reader(
         filter(
@@ -151,7 +157,14 @@ with open('names.dmp', 'r') as f:
         c.execute("INSERT INTO names VALUES (?, ?, ?, ?)", row)
 # 查询句式：SELECT name FROM names where name_class = 'scientific name' and tax_id = '7' limit 1;
 
+
+# 写入层级中英文对照
+with open("layer_eh2cn.txt", 'r') as f:
+    reader = csv.reader(f, delimiter='\t')
+    for row in reader:
+        if row:
+            c.execute(f"INSERT INTO tier_en2ch VALUES (?, ?)",row)
+
+
 conn.commit()
 conn.close()
-
-#

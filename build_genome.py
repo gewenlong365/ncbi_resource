@@ -11,13 +11,10 @@ import sqlite3
 import gzip
 import glob
 import os
-import io
 import re
 
 # from Bio import SeqIO
 # from Bio.Seq import Seq
-
-
 
 # 进入数据库
 conn = sqlite3.connect('ncbi_resource.sqlite')
