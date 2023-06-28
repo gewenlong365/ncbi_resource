@@ -1,0 +1,47 @@
+no rank	无等级
+clade	进化分枝
+
+superkingdom	超界
+kingdom	界
+subkingdom	亚界
+superphylum	超门
+phylum	门
+subphylum	亚门
+superclass	超纲
+class	纲
+subclass	亚纲
+infraclass	次纲
+cohort	股
+subcohort	亚股
+superorder	超目
+order	目
+suborder	亚目
+infraorder	次目
+parvorder	小目
+superfamily	超科
+family	科
+subfamily	亚科
+tribe	族
+subtribe	亚族
+genus	属
+subgenus	亚属
+section	组
+subsection	亚组
+series	系
+species group	物种群
+species subgroup	物种亚群
+species	种
+subspecies	亚种
+varietas	变种
+subvariety	亚变种
+forma	变型
+
+strain	株/品系
+serogroup	血清群
+forma specialis	专化型
+biotype	生物型
+isolate	孤立物
+serotype	血清型
+genotype	基因型
+morph	形态
+pathogroup	病理组
