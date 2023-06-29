@@ -1,0 +1,3 @@
+/genomes/ASSEMBLY_REPORTS/assembly_summary_refseq.txt
+/genomes/ASSEMBLY_REPORTS/assembly_summary_genbank.txt
+/pub/taxonomy/taxdump.tar.gz
